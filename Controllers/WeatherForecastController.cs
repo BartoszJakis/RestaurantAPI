@@ -2,11 +2,23 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace RestaurantAPI.Controllers
 {
+
+
+    public class ClientTemperatureService
+    {
+
+  
+        public int min { get; set; }
+        public int max { get; set; }
+    }
+
+
     [ApiController]
     [Route("[controller]")]
     public class WeatherForecastController : ControllerBase
     {
-      
+     
+
         private readonly ILogger<WeatherForecastController> _logger;
         private readonly IWeatherForecastService _service;
         public WeatherForecastController(ILogger<WeatherForecastController> logger, IWeatherForecastService service)
@@ -15,26 +27,20 @@ namespace RestaurantAPI.Controllers
             _service = service;
         }
 
-        [HttpGet]
-        public IEnumerable<WeatherForecast> Get()
+
+        [HttpPost("generate")]
+        public ActionResult<IEnumerable<WeatherForecast>> generateTemps([FromQuery] int count, [FromBody] ClientTemperatureService number)
         {
-            var result = _service.Get();
-            return result;
+              if (number == null || count <= 0 || number.min > number.max)
+            {
+                return BadRequest("Invalid input parameters.");
+            }
+            var result = _service.Get(count, number.min,number.max);
+
+            return Ok(result);
+
         }
 
 
-        [HttpGet("currentDay/{max}")]
-        
-        public IEnumerable<WeatherForecast> Get2([FromQuery]int take, [FromRoute]int max)
-        {
-            var result = _service.Get();
-            return result;
-        }
-        [HttpPost]
-        public ActionResult<string> Hello([FromBody] string name)
-        {
-            HttpContext.Response.StatusCode = 401;
-            return $"Hello {name}";
-        }
     }
 }
