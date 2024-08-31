@@ -1,5 +1,6 @@
 using RestaurantAPI;
 using RestaurantAPI.Entities;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,12 +8,12 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 
-builder.Services.AddTransient<IWeatherForecastService, WeatherForecastService>();
 
 builder.Services.AddDbContext<RestaurantDbContext>();
 
 builder.Services.AddScoped<RestaurantSeeder>();
 
+builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
 var app = builder.Build();
 
