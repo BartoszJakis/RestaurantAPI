@@ -18,6 +18,7 @@ builder.Services.AddScoped<RestaurantSeeder>();
 builder.Services.AddScoped<IRestaurantService, RestaurantService>();
 
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
+builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
@@ -28,7 +29,15 @@ using (var scope = app.Services.CreateScope())
     seeder.Seed();
 }
 
+
 app.UseHttpsRedirection();
+
+app.UseSwagger();
+
+app.UseSwaggerUI(c =>
+{
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Restaurant API");
+});
 
 app.UseAuthorization();
 
