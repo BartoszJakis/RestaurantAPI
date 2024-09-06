@@ -1,3 +1,4 @@
+using NLog.Web;
 using RestaurantAPI;
 using RestaurantAPI.Entities;
 using RestaurantAPI.Services;
@@ -14,6 +15,7 @@ builder.Services.AddDbContext<RestaurantDbContext>();
 
 builder.Services.AddScoped<RestaurantSeeder>();
 
+builder.Host.UseNLog();
 
 builder.Services.AddScoped<IRestaurantService, RestaurantService>();
 
@@ -21,6 +23,7 @@ builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
+
 
 // Configure the HTTP request pipeline.
 using (var scope = app.Services.CreateScope())
