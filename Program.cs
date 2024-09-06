@@ -1,6 +1,7 @@
 using NLog.Web;
 using RestaurantAPI;
 using RestaurantAPI.Entities;
+using RestaurantAPI.Middleware;
 using RestaurantAPI.Services;
 using System.Reflection;
 
@@ -17,6 +18,7 @@ builder.Services.AddScoped<RestaurantSeeder>();
 
 builder.Host.UseNLog();
 
+builder.Services.AddScoped<ErrorHandlingMiddleware>();
 builder.Services.AddScoped<IRestaurantService, RestaurantService>();
 
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
@@ -32,6 +34,7 @@ using (var scope = app.Services.CreateScope())
     seeder.Seed();
 }
 
+app.UseMiddleware<ErrorHandlingMiddleware>();
 
 app.UseHttpsRedirection();
 
