@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using OpenQA.Selenium;
 using RestaurantAPI.Entities;
 using RestaurantAPI.Models;
@@ -22,7 +23,7 @@ namespace RestaurantAPI.Services
             var restuarant = _context.Restaurants.FirstOrDefault(r => r.Id == RestaurantId);
 
             if (restuarant == null)
-                throw new DirectoryNotFoundException("Restaurant not found");
+                throw new NotFoundException("Restaurant not found");
 
             var NewDish = _mapper.Map<Dish>(dto);
 
@@ -46,6 +47,38 @@ namespace RestaurantAPI.Services
             _context.SaveChanges();
             return dish.Id;
 
+        }
+
+        public DishDto GetById(int restaurantId, int DishId)
+        {
+            var restuarant = _context.Restaurants.FirstOrDefault(r => r.Id == restaurantId);
+
+            if (restuarant == null)
+                throw new NotFoundException("Restaurant not found");
+
+
+            var dish = _context.Dishes.FirstOrDefault(d => d.Id == DishId);
+
+            if (dish == null || dish.RestaurantId != restaurantId)
+                throw new NotFoundException("Dish not found");
+
+            var DishDto=_mapper.Map<DishDto>(dish);
+            return DishDto;
+
+        }
+
+        public List<DishDto> GetAll(int restaurantId)
+        {
+            var restuarant = _context
+                .Restaurants
+                .Include(r => r.Dishes)
+                .FirstOrDefault(r => r.Id == restaurantId);
+
+            if (restuarant == null)
+                throw new NotFoundException("Restaurant not found");
+
+            var dishDtos = _mapper.Map<List<DishDto>>(restuarant.Dishes);
+            return dishDtos;
         }
     }
 }

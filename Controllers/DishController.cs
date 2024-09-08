@@ -18,7 +18,40 @@ namespace RestaurantAPI.Controllers
         }
 
 
-        [HttpPost]
+        [HttpGet("{dishId}")]
+        public ActionResult<DishDto> Get([FromRoute] int restaurantId, [FromRoute]int dishId)
+        {
+            try
+            {
+                var dish = _dishService.GetById(restaurantId, dishId);
+
+                return Ok(dish);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+        }
+
+        [HttpGet]
+        public ActionResult<List<DishDto>> GetAll([FromRoute] int RestaurantId)
+        {
+            try
+            {
+                var dishes = _dishService.GetAll(RestaurantId);
+
+                return Ok(dishes);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+        }
+
+
+            [HttpPost]
       public ActionResult Post([FromRoute] int restaurantId, [FromBody]CreateDishDto dto)
         {
             try
@@ -34,21 +67,21 @@ namespace RestaurantAPI.Controllers
 
         }
 
-        [HttpDelete("{id}")]
-        public ActionResult Delete([FromRoute] int restaurantId, [FromRoute] int id)
+        [HttpDelete("{dishId}")]
+        public ActionResult Delete([FromRoute] int restaurantId, [FromRoute] int dishId)
         {
             try
             {
-                var deleteDish = _dishService.Delete(id);
-                return NoContent(); // Usunięcie zakończone sukcesem, nie zwracamy treści
+                var deleteDish = _dishService.Delete(dishId);
+                return NoContent();
             }
             catch (KeyNotFoundException)
             {
-                return NotFound(); // Jeśli danie nie zostało znalezione
+                return NotFound(); 
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message); // Inne błędy
+                return BadRequest(ex.Message); 
             }
         }
 
