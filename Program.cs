@@ -20,7 +20,7 @@ builder.Host.UseNLog();
 
 builder.Services.AddScoped<ErrorHandlingMiddleware>();
 builder.Services.AddScoped<IRestaurantService, RestaurantService>();
-
+builder.Services.AddScoped<IDishService, DishService>();
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 builder.Services.AddSwaggerGen();
 
