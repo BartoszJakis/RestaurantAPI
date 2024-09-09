@@ -16,10 +16,11 @@ namespace RestaurantAPI.Services
             var newUser = new User()
             {
                 Email = dto.Email,
+                Name = dto.Name,
                 DateOfBirth = dto.DateOfBirth,
                 Nationality = dto.Nationality,
-                RoleId = dto.RoleId,
-                PasswordHash = dto.Password
+                RoleId = dto.RoleId
+             
             };
 
             _context.Users.Add(newUser);
