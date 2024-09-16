@@ -17,7 +17,11 @@
             {
                 await next.Invoke(context);
             }
-
+            catch (BadHttpRequestException ex)
+            {
+                context.Response.StatusCode = 400;
+                await context.Response.WriteAsync("Somewthing went wrong");
+            }
             catch (Exception ex)
             {
                 _logger.LogError(ex, ex.Message);
