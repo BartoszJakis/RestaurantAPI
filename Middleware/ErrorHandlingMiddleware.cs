@@ -27,7 +27,7 @@
                 _logger.LogError(ex, ex.Message);
 
                 context.Response.StatusCode = 500;
-                await context.Response.WriteAsync("Somewthing went wrong");
+                await context.Response.WriteAsync("So,,,mewthing went wrong");
             }
         
         
